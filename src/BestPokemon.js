@@ -3,10 +3,10 @@ import React, { useState } from "react";
 const BestPokemon = (props) => {
   return (
     <div>
-      <p> My favourite Pokemon is Squirtle </p>
+      <p> My favourite Pokemon is {props.pokemon} </p>
       <ul>
-        {props.abilities.map((abilities, index) => {
-          return <li key={index}> {abilities}</li>;
+        {props.abilities.map((obj, index) => {
+          return <li key={index}> {obj.ability.name}</li>;
         })}
       </ul>
     </div>
@@ -19,10 +19,15 @@ const BestPokemonFetcher = () => {
   React.useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon/1/")
       .then((response) => response.json())
-      .then((data) => setBestPokemon(data));
+      .then((data) => {
+        setBestPokemon(data);
+        console.log(data);
+      });
   }, []);
 
-  return bestPokemon ? <BestPokemonFetcher pokemon={bestPokemon} /> : null;
+  return bestPokemon ? (
+    <BestPokemon pokemon={bestPokemon.name} abilities={bestPokemon.abilities} />
+  ) : null;
 };
 
 export default BestPokemonFetcher;
