@@ -13,24 +13,46 @@ const BestPokemon = (props) => {
   );
 };
 
-const BestPokemonFetcher = () => {
+const BestPokemonFetcher = (props) => {
   const [bestPokemon, setBestPokemon] = React.useState(null);
 
   React.useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon/1/")
+    setBestPokemon(null);
+    fetch(`https://pokeapi.co/api/v2/pokemon/${props.pokemonId}/`)
       .then((response) => response.json())
       .then((data) => {
         setBestPokemon(data);
         console.log(data);
       });
-  }, []);
+  }, [props.pokemonId]);
 
   return bestPokemon ? (
     <BestPokemon pokemon={bestPokemon.name} abilities={bestPokemon.abilities} />
-  ) : null;
+  ) : (
+    "Loading.."
+  );
 };
 
-export default BestPokemonFetcher;
+function BestPokemonSelector() {
+  const [pokemonId, setPokemonId] = useState(null);
+
+  function handleBulbasaurClick() {
+    setPokemonId(1);
+  }
+  function handleCharmanderClick() {
+    setPokemonId(4);
+  }
+
+  return (
+    <div>
+      <button onClick={handleBulbasaurClick}>Fetch Bulbasaur</button>
+      <button onClick={handleCharmanderClick}>Fetch Charmander</button>
+      {pokemonId ? <BestPokemonFetcher pokemonId={pokemonId} /> : null}
+    </div>
+  );
+}
+
+export default BestPokemonSelector;
 
 // comments:
 // line 21 - If there is some bestPokemon state (else {}), then render the BestPokemon component and pass the bestPokemon state variable as the pokemon prop (hint: <BestPokemon pokemon={bestPokemon} />).

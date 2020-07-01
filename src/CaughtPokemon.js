@@ -1,23 +1,49 @@
 import React, { useState } from "react";
 
 const CaughtPokemon = (props) => {
-  const [totalCaught, setTotalCaught] = useState(0);
+  const [caughtPokemon, setCaughtPokemon] = useState([]);
+  const [pokemonNameInput, setPokemonNameInput] = useState("");
 
-  function incrementTotal() {
-    setTotalCaught(totalCaught + 1);
+  function catchPokemon() {
+    if (pokemonNameInput) {
+      // setCaughtPokemon(caughtPokemon.concat(pokemonNameInput));
+      // different way to add the value of the input field is with the spread operator
+      setCaughtPokemon([...caughtPokemon, pokemonNameInput]);
+      setPokemonNameInput("");
+      console.log("How many Pokemons", caughtPokemon);
+    }
+  }
+
+  function handleInputChange(event) {
+    console.log("this is my input", event.target.value);
+    setPokemonNameInput(event.target.value);
   }
 
   return (
     <div>
-      <button onClick = {incrementTotal}> Increment!</button>
-      <p> Caught {totalCaught} Pokemons on {props.date} </p>
+      <input
+        type="text"
+        value={pokemonNameInput}
+        onChange={handleInputChange}
+      ></input>
+      <button onClick={catchPokemon}> Catch!</button>
+      <div>
+        Caught:
+        <span>
+          {caughtPokemon.length}
+          </span>
+        <ul>
+          {caughtPokemon.map((name, index) => (
+            <li key={index}>{name}</li>
+          ))}
+          Pokemons on {props.date}
+        </ul>
+      </div>
     </div>
   );
 };
 
 export default CaughtPokemon;
-
-
 
 // comments:
 // line 4 - Create a new state variable called totalCaught and initialise it to 0
